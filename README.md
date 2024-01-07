@@ -20,6 +20,10 @@ import (
 	montemplates "github.com/janpfeifer/monitored-templates"
 )
 
+flagDynamicTemplates = flag.Bool("dynamic_templates", false,
+	"If set, template files are checked at every access to checks for changes. "+
+	"Slow, leave this disabled for production.")
+
 func main() {
 	...
 	templateSet, err := montemplates.New(
