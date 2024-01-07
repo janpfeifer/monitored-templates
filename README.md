@@ -2,7 +2,7 @@
 
 Go library that parses HTML templates from a file tree.
 
-During construction it parses all the templates under a root directory, traversing subdirectories
+During construction, it parses all the templates under a root directory, traversing subdirectories
 for files with the given suffixes.
 
 At execution time, if `dynamic` is set to true, at every request (`Get()` method) it checks whether 
@@ -16,6 +16,8 @@ If `dyncamic==false` it is read-only and there is no contention.
 ## Example
 
 ```go
+package main
+
 import (
 	montemplates "github.com/janpfeifer/monitored-templates"
 )
@@ -33,7 +35,7 @@ func main() {
 	...
 	h := func (w http.ResponseWriter, req *http.Request) {
 		t, err := templateSet.Get("nav/login.html")  // Will re-read the file if changed
-		t.Execute(w, ...)
+		err = t.Execute(w, ...)if err != nil { ... }
 	}
 	...
 }
