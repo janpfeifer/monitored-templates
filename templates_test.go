@@ -3,6 +3,7 @@ package montemplates
 import (
 	"bytes"
 	"github.com/stretchr/testify/require"
+	"html/template"
 	"k8s.io/klog/v2"
 	"os"
 	"path"
@@ -73,6 +74,28 @@ func TestDynamicTemplates(t *testing.T) {
 	b.Reset()
 	require.NoError(t, tmpl.Execute(&b, nil))
 	require.Equal(t, "A(foo, B(bar))", b.String())
+
+	require.NoError(t, os.RemoveAll(tmpDir)) // clean up
+}
+
+func TestFuncMap(t *testing.T) {
+	// Create a temporary directory and files `a.html` and `s/b.html`
+	tmpDir, err := os.MkdirTemp("", "warmap_templates_test")
+	require.NoError(t, err)
+	klog.Infof("TestFuncMap: temporary directory %s", tmpDir)
+
+	// Create test files `a.html` and `s/b.html` and something other file not used `foo.bar`.
+	require.NoError(t, os.WriteFile(path.Join(tmpDir, "a.html"), []byte(`A({{the_answer}})`), 0755))
+	c, err := Build(tmpDir, []string{"*.html"}).WithFuncs(
+		template.FuncMap{"the_answer": func() string { return "42" }}).Done()
+	require.NoError(t, err)
+	var tmpl *template.Template
+	tmpl, err = c.Get("a.html")
+	require.NoError(t, err)
+
+	var b bytes.Buffer
+	require.NoError(t, tmpl.Execute(&b, nil))
+	require.Equal(t, "A(42)", b.String())
 
 	require.NoError(t, os.RemoveAll(tmpDir)) // clean up
 }
