@@ -1,9 +1,9 @@
 # Monitored Templates
 
-Go library that parses HTML templates from a file tree.
+Go library that parses HTML templates from a file tree. Very small (~200 lines).
 
 During construction, it parses all the templates under a root directory, traversing subdirectories
-for files with the given suffixes.
+for files with the given patterns.
 
 At execution time, if `dynamic` is set to true, at every request (`Get()` method) it checks whether 
 files have changed, and re-parses them accordingly.
