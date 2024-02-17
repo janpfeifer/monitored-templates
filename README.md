@@ -1,6 +1,6 @@
 # Monitored Templates
 
-Go minimalistic library that parses HTML templates from a file tree. 
+Minimalistic Go library that parses HTML templates from a file tree, and monitors for changes. 
 
 During construction, it parses all the templates under a root directory, traversing subdirectories
 for files with the given patterns.
